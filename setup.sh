@@ -27,7 +27,7 @@ set_network()
 	read -p "Configure Wired Ethernet Adapter? [Y/n]: " eth_con
 	case $eth_con in
 		[Nn]* ) echo "Skipping Network Configuration";;
-		[Yy]* ) eth0=`ip addr | grep enp | cut -d ' ' -f 2 | sed 's/://g'` # Determine the wired network interface
+		[Yy]* ) eth0=`ip addr | grep enp | cut -d ' ' -f 2 | sed "s/://g"` # Determine the wired network interface
 				echo "Attempting to lease ip to $eth0"
 				dhcpcd $eth0
 				# Enable auto connect on boot
@@ -42,7 +42,7 @@ set_network()
 	read -p "Configure Wireless Adapter? [y/N]" wifi_con
 	case $wifi_con in
 		[Nn]* ) echo "Skipping Wifi Configuration";;
-		[Yy]* ) wlp0=`ip addr | grep wlp | cut -d ' ' -f 2 | sed 's/://g'` # Determine the wireless network interface
+		[Yy]* ) wlp0=`ip addr | grep wlp | cut -d ' ' -f 2 | sed "s/://g"` # Determine the wireless network interface
 				# Have netctl automatically connect to known host on startup
 				read -p "Please enter the SSID: " ssid
 				read -p "Please enter the encryption type: " sec
@@ -219,7 +219,7 @@ tools()
 	case $addcups in
 		[Yy]* ) 
 				read -p "Enter Print Server Address: " pserv
-				sed -i 's/\/var\/run\/cups\/cups.sock/$pserv/g' /etc/cups/client.conf
+				sed -i "s/\/var\/run\/cups\/cups.sock/$pserv/g" /etc/cups/client.conf
 				echo "CUPS client file has been updated.";;
 
 		[Nn]* ) echo "Skipping CUPS configuration";;
@@ -264,7 +264,7 @@ server()
    		echo "error: Not a valid port" >&2; exit 1
 	fi
 
-	sed -i 's/#Port 22/Port $sshport/g' /etc/ssh/sshd_config
+	sed -i "s/#Port 22/Port $sshport/g" /etc/ssh/sshd_config
 	systemctl enable sshd
 	systemctl start sshd
 
